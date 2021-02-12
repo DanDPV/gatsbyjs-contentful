@@ -1,0 +1,38 @@
+.rich-content {
+  h1 {
+    font-size: xx-large;
+  }
+
+  h2 {
+    font-size: x-large;
+  }
+
+  h3 {
+    font-size: large;
+  }
+
+  p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  a {
+    color: darken($color: lightskyblue, $amount: 10);
+
+    &:hover {
+      color: darken($color: lightskyblue, $amount: 20);
+    }
+  }
+
+  ul {
+    list-style: disc;
+    margin-left: 25px;
+    margin-bottom: 10px;
+
+    li {
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
