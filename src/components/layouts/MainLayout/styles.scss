@@ -1,0 +1,10 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: lighten($color: #c7ceff, $amount: 5);
+}
+
+.content-wrap {
+  flex: 1;
+}
