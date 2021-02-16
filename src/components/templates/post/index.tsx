@@ -1,10 +1,11 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
-import { BLOCKS } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
+import IframeContainer from '../../IframeContainer';
 import MainLayout from '../../layouts/MainLayout';
 import Routes from '../../../routes/routes';
 
@@ -60,6 +61,38 @@ const Post = ({ data }: Props) => {
           <div className="flex justify-center my-4">
             <img alt={resource.title} src={resource.file.url} />
           </div>
+        );
+      },
+      [INLINES.HYPERLINK]: node => {
+        if (node.data.uri.includes('player.vimeo.com/video')) {
+          return (
+            <IframeContainer>
+              <iframe
+                title="Unique Title 001"
+                src={node.data.uri}
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
+            </IframeContainer>
+          );
+        } else if (node.data.uri.includes('youtube.com/embed')) {
+          return (
+            <IframeContainer>
+              <iframe
+                title="Unique Title 002"
+                src={node.data.uri}
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
+            </IframeContainer>
+          );
+        }
+
+        return (
+          <a href={node.data.uri} target="_blank" rel="noopener noreferrer">
+            {node.content[0].value}
+          </a>
         );
       },
     },
