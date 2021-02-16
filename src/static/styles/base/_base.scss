@@ -35,4 +35,16 @@
       }
     }
   }
+
+  ol {
+    list-style: decimal;
+    margin-left: 25px;
+    margin-bottom: 10px;
+
+    li {
+      p {
+        margin: 0;
+      }
+    }
+  }
 }
