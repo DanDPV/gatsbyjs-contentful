@@ -1,6 +1,8 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { monokaiSublime } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
@@ -93,6 +95,21 @@ const Post = ({ data }: Props) => {
           <a href={node.data.uri} target="_blank" rel="noopener noreferrer">
             {node.content[0].value}
           </a>
+        );
+      },
+    },
+    renderMark: {
+      [MARKS.CODE]: node => {
+        return (
+            <SyntaxHighlighter
+              language="javascript"
+              style={monokaiSublime}
+              customStyle={{fontSize: 15}}
+              PreTag={({children, ...preProps}) => <span {...preProps}>{children}</span>}
+              showLineNumbers
+            >
+              {node}
+            </SyntaxHighlighter>
         );
       },
     },
