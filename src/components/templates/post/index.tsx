@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monokaiSublime } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
@@ -15,10 +16,22 @@ export const query = graphql`
   query($slug: String!) {
     contentfulBlogPost(slug: { eq: $slug }) {
       title
-      publishedDate(formatString: "MMMM Do. YYYY")
+      publishedDate
+      mainImage {
+        gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED)
+        contentful_id
+        title
+        file {
+          url
+        }
+      }
+      tags {
+        description
+      }
       body {
         raw
         references {
+          gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED)
           contentful_id
           title
           file {
@@ -35,9 +48,57 @@ type Props = {
     contentfulBlogPost: {
       title: string;
       publishedDate: string;
+      mainImage: {
+        gatsbyImageData: {
+          images: {
+            sources: {
+              srcSet: string;
+              sizes: string;
+              type: string;
+            }[];
+            fallback: {
+              src: string;
+              srcSet: string;
+              sizes: string;
+            };
+          };
+          layout: string;
+          width: number;
+          height: number;
+          placeholder: {
+            fallback: string;
+          };
+        };
+        contentful_id: string;
+        title: string;
+        file: {
+          url: string;
+        };
+      };
+      tags: null;
       body: {
         raw: string;
         references: {
+          gatsbyImageData: {
+            images: {
+              sources: {
+                srcSet: string;
+                sizes: string;
+                type: string;
+              }[];
+              fallback: {
+                src: string;
+                srcSet: string;
+                sizes: string;
+              };
+            };
+            layout: string;
+            width: number;
+            height: number;
+            placeholder: {
+              fallback: string;
+            };
+          };
           contentful_id: string;
           title: string;
           file: {
@@ -50,6 +111,7 @@ type Props = {
 };
 
 const Post = ({ data }: Props) => {
+  console.log(data);
   const { contentfulBlogPost } = data;
 
   const options = {
@@ -60,9 +122,11 @@ const Post = ({ data }: Props) => {
           ref => ref.contentful_id === id
         );
         return (
-          <div className="flex justify-center my-4">
-            <img alt={resource.title} src={resource.file.url} />
-          </div>
+          <GatsbyImage
+            image={resource.gatsbyImageData as any}
+            alt={resource.title}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          />
         );
       },
       [INLINES.HYPERLINK]: node => {
@@ -101,15 +165,17 @@ const Post = ({ data }: Props) => {
     renderMark: {
       [MARKS.CODE]: node => {
         return (
-            <SyntaxHighlighter
-              language="javascript"
-              style={monokaiSublime}
-              customStyle={{fontSize: 15}}
-              PreTag={({children, ...preProps}) => <span {...preProps}>{children}</span>}
-              showLineNumbers
-            >
-              {node}
-            </SyntaxHighlighter>
+          <SyntaxHighlighter
+            language="javascript"
+            style={monokaiSublime}
+            customStyle={{ fontSize: 15 }}
+            PreTag={({ children, ...preProps }) => (
+              <span {...preProps}>{children}</span>
+            )}
+            showLineNumbers
+          >
+            {node}
+          </SyntaxHighlighter>
         );
       },
     },
