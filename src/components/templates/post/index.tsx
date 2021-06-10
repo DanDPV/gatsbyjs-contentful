@@ -43,75 +43,8 @@ export const query = graphql`
   }
 `;
 
-type Props = {
-  data: {
-    contentfulBlogPost: {
-      title: string;
-      publishedDate: string;
-      mainImage: {
-        gatsbyImageData: {
-          images: {
-            sources: {
-              srcSet: string;
-              sizes: string;
-              type: string;
-            }[];
-            fallback: {
-              src: string;
-              srcSet: string;
-              sizes: string;
-            };
-          };
-          layout: string;
-          width: number;
-          height: number;
-          placeholder: {
-            fallback: string;
-          };
-        };
-        contentful_id: string;
-        title: string;
-        file: {
-          url: string;
-        };
-      };
-      tags: null;
-      body: {
-        raw: string;
-        references: {
-          gatsbyImageData: {
-            images: {
-              sources: {
-                srcSet: string;
-                sizes: string;
-                type: string;
-              }[];
-              fallback: {
-                src: string;
-                srcSet: string;
-                sizes: string;
-              };
-            };
-            layout: string;
-            width: number;
-            height: number;
-            placeholder: {
-              fallback: string;
-            };
-          };
-          contentful_id: string;
-          title: string;
-          file: {
-            url: string;
-          };
-        }[];
-      };
-    };
-  };
-};
+const Post = ({ data }: any) => {
 
-const Post = ({ data }: Props) => {
-  console.log(data);
   const { contentfulBlogPost } = data;
 
   const options = {
@@ -123,7 +56,7 @@ const Post = ({ data }: Props) => {
         );
         return (
           <GatsbyImage
-            image={resource.gatsbyImageData as any}
+            image={resource.gatsbyImageData}
             alt={resource.title}
             style={{ display: 'flex', justifyContent: 'center' }}
           />
